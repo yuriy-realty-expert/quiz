@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<title>Quiz</title>
+<title>Realty Group Quiz</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
@@ -11,12 +11,58 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta charset="UTF-8">
 <base target="_top">
-<script>
-  window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSeb1mEXcX-lhI5Nc2iasFti2vex45pfqiZS22vk72X9OI30eA/viewform";
-</script>
+<style>
+.root-iframe {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  z-index: 1000;
+  opacity: 1;
+  }
+</style>
+
 </head>
 
 <body>
+<iframe id="root-iframe" class="root-iframe" allow="fullscreen *" src="https://docs.google.com/forms/d/e/1FAIpQLSeb1mEXcX-lhI5Nc2iasFti2vex45pfqiZS22vk72X9OI30eA/viewform"></iframe>
+
+<script>
+const ANALYTICS_SERVICE = "https://script.google.com/macros/s/";
+const SERVICE_ID = "AKfycbyW7xyhGdzm7IrtuvjOu0xukJBDfXWR1BiWY-FD_hbvV0-7WbUqMi34hVVlq6EDWxXfkw";
+const QUIZ = "1";
+
+function onOpen() {
+  let id = getId();
+  if (!id) return;
+  let url = ANALYTICS_SERVICE.concat(SERVICE_ID, '/exec?', 'q=', QUIZ, '&','id=', id);
+  fetch(url)
+    .then(onOpenCallback)
+    .catch(e => {
+      console.error('analytics call failed');
+    })
+}
+
+function onOpenCallback() {
+  console.log("analytics saved");
+}
+
+function getId() {
+  let q = window.location.search;
+  if (!q) return null;
+  q = q.replace("?", "");
+  if (q.includes("&") || !q.includes("id")) return null;
+  return q.split("=")[1];
+}
+
+onOpen();
+</script>
+
 </body>
 
 </html>
